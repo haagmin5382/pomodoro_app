@@ -44,6 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void onResetPressed() {
+    setState(() {
+      totalSeconds = twentyFiveMinutes;
+      totalPomodoros = 0;
+      isRunning = false;
+      timer.cancel();
+    });
+  }
+
   String format(int seconds) {
     var duration = Duration(seconds: seconds); // 초를 타이머로 바꿔준다.
     var timer = duration.toString().split(".").first.substring(2, 7);
@@ -71,19 +80,26 @@ class _HomeScreenState extends State<HomeScreen> {
             Flexible(
                 flex: 2,
                 child: Center(
-                  child: IconButton(
-                      onPressed: isRunning ? onPausePressed : onStartPressed,
-                      iconSize: 120,
-                      color: Theme.of(context).cardColor,
-                      icon: isRunning
-                          ? const Icon(Icons.pause_circle_outline)
-                          : const Icon(Icons.play_circle_outlined)),
+                  child: Column(children: [
+                    IconButton(
+                        onPressed: isRunning ? onPausePressed : onStartPressed,
+                        iconSize: 120,
+                        color: Theme.of(context).cardColor,
+                        icon: isRunning
+                            ? const Icon(Icons.pause_circle_outline)
+                            : const Icon(Icons.play_circle_outlined)),
+                    IconButton(
+                        onPressed: onResetPressed,
+                        iconSize: 120,
+                        color: Theme.of(context).cardColor,
+                        icon: const Icon(Icons.stop_circle_outlined))
+                  ]),
                 )),
             Flexible(
                 child: Row(
               children: [
                 Expanded(
-                  // 왼쪽에 있는 부분을 옆까지 확장시켜줌
+                  // 왼쪽에 있는 부분을 오른쪽 끝까지 확장시켜줌
                   child: Container(
                     decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
@@ -91,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center, // 수직으로 가운데
                         children: [
-                          Text('Pomodors',
+                          Text('Pomodoros',
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
